@@ -35,4 +35,5 @@ export default function MainLayout() {
       </AppShell.Main>
     </AppShell>
   );
+  
 }

@@ -63,4 +63,5 @@ export default function Sidebar({ userName, type }: SidebarComponentProps) {
       </Box>
     </Stack>
   );
+  
 }

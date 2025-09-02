@@ -73,12 +73,15 @@ export default function HomePage() {
   // Toggle done
   const toggleDoneTask = (taskId: string) => {
     setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId
-          ? { ...t, isDone: !t.isDone, doneDate: !t.isDone ? new Date() : null }
+      prev.map((t) => 
+        t.id === taskId 
+          ? { 
+              ...t, 
+              isDone: !t.isDone,
+              doneDate: !t.isDone ? new Date() : null 
+            } 
           : t
-      )
-    );
+      ));
   };
 
   return (
@@ -163,4 +166,5 @@ export default function HomePage() {
       </Stack>
     </Container>
   );
+  
 }
