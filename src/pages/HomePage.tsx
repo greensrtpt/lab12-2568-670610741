@@ -70,12 +70,15 @@ export default function HomePage() {
     setTasks((prev) => prev.filter((task) => task.id !== taskId));
   };
 
-  // Toggle done
+// Toggle done
   const toggleDoneTask = (taskId: string) => {
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, isDone: !t.isDone } : t))
     );
   };
+  
+  void toggleDoneTask;
+
   
   return (
     <Container size="sm" py="lg">
