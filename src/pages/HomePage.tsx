@@ -14,12 +14,14 @@ import { IconTrash } from "@tabler/icons-react";
 import { LoremIpsum } from "lorem-ipsum";
 import { randomId } from "@mantine/hooks";
 import { v4 as uuidv4 } from "uuid";
+
 interface Task {
   id: string;
   title: string;
   description: string;
   isDone: boolean;
   dueDate: Date | null;
+  doneDate?: Date | null;
 }
 
 export default function HomePage() {
@@ -46,15 +48,10 @@ export default function HomePage() {
       dueDate: new Date(),
     },
   ]);
+
   const lorem = new LoremIpsum({
-    sentencesPerParagraph: {
-      max: 8,
-      min: 4,
-    },
-    wordsPerSentence: {
-      max: 16,
-      min: 4,
-    },
+    sentencesPerParagraph: { max: 8, min: 4 },
+    wordsPerSentence: { max: 16, min: 4 },
   });
 
   const handleAdd = () => {
@@ -76,7 +73,11 @@ export default function HomePage() {
   // Toggle done
   const toggleDoneTask = (taskId: string) => {
     setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, isDone: !t.isDone } : t))
+      prev.map((t) =>
+        t.id === taskId
+          ? { ...t, isDone: !t.isDone, doneDate: !t.isDone ? new Date() : null }
+          : t
+      )
     );
   };
 
@@ -88,7 +89,9 @@ export default function HomePage() {
           All : {tasks.length} | Done : {tasks.filter((t) => t.isDone).length}
         </Text>
         {/* เพิ่ม Task */}
-        <Button onClick={handleAdd}>Add Task</Button>
+        <Button onClick={handleAdd} color="cyan">
+          Add Task
+        </Button>
         {/* แสดง Task Cards */}
         <Stack w="100%">
           {tasks.map((task) => (
@@ -106,37 +109,52 @@ export default function HomePage() {
                   <Text size="sm" c="dimmed">
                     {task.description}
                   </Text>
+
                   {task.dueDate && (
                     <Text size="xs" c="gray">
                       Due: {task.dueDate.toLocaleDateString()}
                     </Text>
                   )}
+
                   {/* แสดง Date & Time */}
-                  <Text size="xs" c="gray">
-                    Done at:
-                  </Text>
+                  {task.isDone && (
+                    <Text size="xs" c="sireethorn">   
+                      {task.doneDate &&
+                        "Done at: " + task.doneDate.toLocaleString()}
+                    </Text>
+                  )}
                 </Stack>
-                {/* แสดง Button Done & Button Delete */}
+
+                {/* แสดง Checkbox Done & Button Delete */}
                 <Group>
-                  <Button
-                    style={{
-                      backgroundColor: "#71c32fda",
-                      color: "#dce6e7ff",
-                    }}
-                    variant="light"
-                    size="xs"
-                    onClick={() => toggleDoneTask(task.id)}
-                  >
-                    Done
-                  </Button>
-                  <Button
-                    color="chanadda"
+                     <Checkbox
+  checked={task.isDone}
+  onChange={(e) => {
+    const checked = e.currentTarget.checked;
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === task.id
+          ? {
+              ...t,
+              isDone: checked,
+              // ถ้าติ๊ก = true ให้จดเวลาปัจจุบัน, ถ้าเอาออกจะคงเวลาที่เคยทำไว้หรือจะล้างก็ได้
+              doneDate: checked ? new Date() : t.doneDate, // หรือ : null ถ้าอยากล้าง
+            }
+          : t
+      )
+    );
+  }}
+  label="Done"
+/>
+                  <ActionIcon
+                    color="red"
                     variant="light"
                     size="xs"
                     onClick={() => deleteTask(task.id)}
+                    aria-label="Delete task"
                   >
-                    Delete
-                  </Button>
+                    <IconTrash size={16} />
+                  </ActionIcon>
                 </Group>
               </Group>
             </Card>

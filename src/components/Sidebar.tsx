@@ -12,8 +12,8 @@ interface SidebarComponentProps  {
   userName: string;
   type?: "admin" |"student";
 }
-export type { SidebarProps };
-export default function Sidebar() {
+export type { SidebarComponentProps };
+export default function Sidebar({ userName, type }: SidebarComponentProps) {
   return (
     <Stack
       align="stretch"
@@ -40,10 +40,26 @@ export default function Sidebar() {
         {/* <Text component={RouterNavLink} to="/">
           Test
         </Text> */}
-      </Box>
+       </Box>
       {/* แสดงผู้ใช้งาน */}
       <Box p={10}>
-        <Text>chanadda</Text>
+        {/* <Text>Sireethorn</Text> */}
+        <Group>
+         <Indicator inline size={14} offset={4} position="bottom-end" color="red" withBorder>
+            <Avatar
+              radius="xl"
+              src="/sireethornpic.jpeg"
+      
+            />
+          </Indicator>
+          <Stack gap={0}>
+            <Text size="sm" fw={500}>
+              User: {userName} :  {type === "admin" ? "Admin" : "Student"}
+            </Text>
+        
+          </Stack>
+        </Group>
+     
       </Box>
     </Stack>
   );
